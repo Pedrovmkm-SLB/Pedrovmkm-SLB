@@ -1,0 +1,35 @@
+/*Wakeup (Pin que al darle tensión en teoría despierta el Sistema)
+La idea de este sketch es recibir datos a través de puerto serie desde una placa electronica. Esta placa electronica cuenta ademas de con otros con pines de transmision y recepción de datos TX y RX,
+Necesito hacer un hola mundo pudiendo recibir los datos que a traves de ese puerto se están lanzando.
+Fabricante especifica que la velocidad standar con la que se configura este equipo electronico es de 250.000 bps
+*/
+int wakeup = 2;
+int boton = 7;
+int val;
+int incomingByte = 0; // for incoming serial data
+
+
+void setup(){
+    Serial.begin(250000); // opens serial port, sets data rate to 250000 bps
+  pinMode(boton, INPUT);
+  pinMode(wakeup, OUTPUT);
+
+}
+void loop(){
+  val=digitalRead(boton);
+  if (val == HIGH){
+    digitalWrite(wakeup,HIGH);
+  }
+  else{
+    digitalWrite(wakeup,LOW);
+  }
+    // send data only when you receive data:
+  if (Serial.available() > 0) {
+    // read the incoming byte:
+    incomingByte = Serial.read();
+
+    // say what you got:
+    Serial.print("I received: ");
+    Serial.println(incomingByte, DEC);
+  }
+}
